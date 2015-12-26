@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Maps the UserProfileMod table -->
+<!DOCTYPE sqlMap
+  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+  "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="search">
+
+  
+   <select id="get_business_list_by_catId" parameterClass="java.util.Map" resultClass="com.myfood.dto.BusinessSearchDTO" >
+  	SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_city as bussCity,business_state as bussState,business_country as bussCountry,business_zip as bussZip,business_phone as bussPhone,
+  	 business_email as bussEmail,business_website as bussWeb,business_desc as bussDesc,business_services as bussService,
+  	 business_specialities as bussSpeciality,business_longitude as bussLong,business_latitude as bussLat,business_cat_id as catId,
+  	 business_sub_cat_ids as subCatId,business_starting_date as bussStartDate,feed_type as feedType 
+  	 FROM business_info where business_cat_id=#catId# and business_status=1 order by business_cat_id desc limit #startLimit#,#endLimit#
+   </select>
+   
+    <select id="get_business_list_by_catId_lat_long" parameterClass="java.util.Map" resultClass="com.myfood.dto.BusinessSearchDTO" >
+  	 SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_city as bussCity,business_state as bussState,business_country as bussCountry,business_zip as bussZip,business_phone as bussPhone,
+  	 business_email as bussEmail,business_website as bussWeb,business_desc as bussDesc,business_services as bussService,
+  	 business_specialities as bussSpeciality,business_longitude as bussLong,business_latitude as bussLat,business_cat_id as catId,
+  	 business_sub_cat_ids as subCatId,business_starting_date as bussStartDate,feed_type as feedType, 
+  	 3956 * 2 *ASIN(SQRT( POWER(SIN((#latitude# - abs(business_latitude))*pi()/180/2),2)+COS(#latitude#*pi()/180 )*COS(abs(business_latitude)*pi()/180)
+     *POWER(SIN((#longitude#-business_longitude)*pi()/180/2),2))) as distance   
+  	 FROM business_info where business_cat_id=#catId# and business_status=1 and business_longitude between (#longitude#-2/abs(cos(radians(#latitude#))*69)) 
+     and (#longitude#+2/abs(cos(radians(#latitude#))*69)) and business_latitude between (#latitude#-(2/69)) and (#latitude#+(2/69)) 
+     ORDER BY distance limit #startLimit#,#endLimit#
+   </select>
+   
+    <select id="get_business_list_by_subCatId_lat_long" parameterClass="java.util.Map" resultClass="com.myfood.dto.BusinessSearchDTO" >
+  	 SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_city as bussCity,business_state as bussState,business_country as bussCountry,business_zip as bussZip,business_phone as bussPhone,
+  	 business_email as bussEmail,business_website as bussWeb,business_desc as bussDesc,business_services as bussService,
+  	 business_specialities as bussSpeciality,business_longitude as bussLong,business_latitude as bussLat,business_cat_id as catId,
+  	 business_sub_cat_ids as subCatId,business_starting_date as bussStartDate,feed_type as feedType, 
+  	 3956 * 2 *ASIN(SQRT( POWER(SIN((#latitude# - abs(business_latitude))*pi()/180/2),2)+COS(#latitude#*pi()/180 )*COS(abs(business_latitude)*pi()/180)
+     *POWER(SIN((#longitude#-business_longitude)*pi()/180/2),2))) as distance   
+  	 FROM business_info where business_cat_id=#catId# and business_status=1 and business_sub_cat_ids like #subCatId# 
+  	 and business_longitude between (#longitude#-2/abs(cos(radians(#latitude#))*69)) 
+     and (#longitude#+2/abs(cos(radians(#latitude#))*69)) and business_latitude between (#latitude#-(2/69)) and (#latitude#+(2/69)) 
+     ORDER BY distance limit #startLimit#,#endLimit#
+   </select>
+   
+    <select id="get_business_list_by_subCatId" parameterClass="java.util.Map" resultClass="com.myfood.dto.BusinessSearchDTO" >
+  	SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_city as bussCity,business_state as bussState,business_country as bussCountry,business_zip as bussZip,business_phone as bussPhone,
+  	 business_email as bussEmail,business_website as bussWeb,business_desc as bussDesc,business_services as bussService,
+  	 business_specialities as bussSpeciality,business_longitude as bussLong,business_latitude as bussLat,business_cat_id as catId,
+  	 business_sub_cat_ids as subCatId,business_starting_date as bussStartDate,feed_type as feedType  
+  	 FROM business_info where business_cat_id=#catId# and business_sub_cat_ids like #subCatId# and business_status=1 order by business_cat_id desc limit #startLimit#,#endLimit#
+   </select>
+   
+   
+    <select id="get_business_list_by_zip" parameterClass="java.util.Map" resultClass="com.myfood.dto.BusinessSearchDTO" >
+  	SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_city as bussCity,business_state as bussState,business_country as bussCountry,business_zip as bussZip,business_phone as bussPhone,
+  	 business_email as bussEmail,business_website as bussWeb,business_desc as bussDesc,business_services as bussService,
+  	 business_specialities as bussSpeciality,business_longitude as bussLong,business_latitude as bussLat,business_cat_id as catId,
+  	 business_sub_cat_ids as subCatId,business_starting_date as bussStartDate,feed_type as feedType  
+  	 FROM business_info where business_zip=#zipCode# and business_status=1 order by business_cat_id desc limit #startLimit#,#endLimit#
+   </select>
+   
+   
+    <select id="get_business_list_by_lat_long" parameterClass="java.util.Map" resultClass="com.myfood.dto.BusinessSearchDTO" >
+     SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_city as bussCity,business_state as bussState,business_country as bussCountry,business_zip as bussZip,business_phone as bussPhone,
+  	 business_email as bussEmail,business_website as bussWeb,business_desc as bussDesc,business_services as bussService,
+  	 business_specialities as bussSpeciality,business_longitude as bussLong,business_latitude as bussLat,business_cat_id as catId,
+  	 business_sub_cat_ids as subCatId,business_starting_date as bussStartDate,feed_type as feedType, 
+  	 3956 * 2 *ASIN(SQRT( POWER(SIN((#latitude# - abs(business_latitude))*pi()/180/2),2)+COS(#latitude#*pi()/180 )*COS(abs(business_latitude)*pi()/180)
+     *POWER(SIN((#longitude#-business_longitude)*pi()/180/2),2))) as distance   
+  	 FROM business_info where business_status=1 and business_longitude between (#longitude#-2/abs(cos(radians(#latitude#))*69)) 
+     and (#longitude#+2/abs(cos(radians(#latitude#))*69)) and business_latitude between (#latitude#-(2/69)) and (#latitude#+(2/69)) 
+     having distance &lt;=#distance# ORDER BY distance limit #startLimit#,#endLimit#	
+   </select>
+   
+    <select id="get_business_list_by_text" parameterClass="java.util.Map" resultClass="com.myfood.dto.BusinessSearchDTO" >
+  	SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_city as bussCity,business_state as bussState,business_country as bussCountry,business_zip as bussZip,business_phone as bussPhone,
+  	 business_email as bussEmail,business_website as bussWeb,business_desc as bussDesc,business_services as bussService,
+  	 business_specialities as bussSpeciality,business_longitude as bussLong,business_latitude as bussLat,business_cat_id as catId,
+  	 business_sub_cat_ids as subCatId,business_starting_date as bussStartDate,feed_type as feedType  
+  	 FROM business_info where business_name like #text# or  business_desc like #text# and business_status=1 
+  	 order by business_cat_id desc limit #startLimit#,#endLimit#
+   </select>
+   
+    <select id="get_business_list_by_text_lat_long" parameterClass="java.util.Map" resultClass="com.myfood.dto.BusinessSearchDTO" >
+  	 SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_city as bussCity,business_state as bussState,business_country as bussCountry,business_zip as bussZip,business_phone as bussPhone,
+  	 business_email as bussEmail,business_website as bussWeb,business_desc as bussDesc,business_services as bussService,
+  	 business_specialities as bussSpeciality,business_longitude as bussLong,business_latitude as bussLat,business_cat_id as catId,
+  	 business_sub_cat_ids as subCatId,business_starting_date as bussStartDate,feed_type as feedType, 
+  	 3956 * 2 *ASIN(SQRT( POWER(SIN((#latitude# - abs(business_latitude))*pi()/180/2),2)+COS(#latitude#*pi()/180 )*COS(abs(business_latitude)*pi()/180)
+     *POWER(SIN((#longitude#-business_longitude)*pi()/180/2),2))) as distance   
+  	 FROM business_info where  business_name like #text# or  business_desc like #text# and business_status=1
+  	 and business_longitude between (#longitude#-2/abs(cos(radians(#latitude#))*69)) 
+     and (#longitude#+2/abs(cos(radians(#latitude#))*69)) and business_latitude between (#latitude#-(2/69)) and (#latitude#+(2/69)) 
+     ORDER BY distance limit #startLimit#,#endLimit#
+   </select>
+
+</sqlMap> 

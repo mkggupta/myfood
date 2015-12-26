@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Maps the UserProfileMod table -->
+<!DOCTYPE sqlMap
+  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+  "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="feedback">
+
+  
+    <insert id="insert_feedback_info"  parameterClass="com.myfood.dto.FeedBackInfo" >
+  	 insert into feedback_info(user_id,email,feedback_text) 
+     values (#userId#, #email#,#feedBackText#)
+  </insert>
+  
+   <insert id="insert_feedback_reply_info"  parameterClass="com.myfood.dto.FeedBackReplyInfo" >
+  	 insert into feedback_reply_info(feedback_id,reply_text,replying_user_id) 
+     values (#feedBackId#, #replyText#,#replyingUserId#)
+  </insert>
+  
+	
+  <select id="get_feedback_list" parameterClass="java.util.Map" resultClass="com.myfood.dto.FeedBackInfo">
+		SELECT user_id as userId,feedback_id as feedBackId,email,feedback_text as feedBackText,status FROM feedback_info order by feedback_id desc limit #startLimit#,#endLimit#
+  </select>
+	
+
+</sqlMap> 

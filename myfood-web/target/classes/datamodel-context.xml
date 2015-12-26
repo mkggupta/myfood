@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:ehcache="http://www.springmodules.org/schema/ehcache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd http://www.springmodules.org/schema/ehcache
+						http://www.springmodules.org/schema/cache/springmodules-ehcache.xsd">
+	<context:annotation-config />
+	<bean id="serviceFactory" class="com.myfood.dao.service.ContextProvider" />
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/my_order?zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+		<property name="initialSize" value="20" />
+		<property name="maxIdle" value="10" />
+		<property name="maxActive" value="60" />
+		<property name="maxWait" value="3000" />
+		<property name="removeAbandoned" value="true" />
+		<property name="logAbandoned" value="true" />
+	</bean>
+
+	<bean id="sqlMap" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation">
+			<value>classpath:SQLMapConfig.xml</value>
+		</property>
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="appAboutDAOImpl" class="com.myfood.dao.modules.about.AboutDAOImpl">
+		<property name="sqlMapClient_" ref="sqlMap" />
+	</bean>
+	<bean id="appAdvtDAOImpl" class="com.myfood.dao.modules.advt.AdvtDAOImpl">
+		<property name="sqlMapClient_" ref="sqlMap" />
+	</bean>
+	<bean id="appBusinessDAOImpl" class="com.myfood.dao.modules.business.BusinessDAOImpl">
+		<property name="sqlMapClient_" ref="sqlMap" />
+	</bean>
+	<bean id="appCatDAOImpl" class="com.myfood.dao.modules.category.CategoryDAOImpl">
+		<property name="sqlMapClient_" ref="sqlMap" />
+	</bean>
+	<bean id="appFeedbackDAOImpl" class="com.myfood.dao.modules.feedback.FeedbackDAOImpl">
+		<property name="sqlMapClient_" ref="sqlMap" />
+	</bean>
+	<bean id="appSearchDAOImpl" class="com.myfood.dao.modules.search.SearchDAOImpl">
+		<property name="sqlMapClient_" ref="sqlMap" />
+	</bean>
+	<bean id="appUserDAOImpl" class="com.myfood.dao.modules.user.UserDAOImpl">
+		<property name="sqlMapClient_" ref="sqlMap" />
+	</bean>
+	
+	
+	
+	
+</beans>

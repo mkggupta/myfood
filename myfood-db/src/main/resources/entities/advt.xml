@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Maps the UserProfileMod table -->
+<!DOCTYPE sqlMap
+  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+  "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="advt">
+
+  <insert id="insert_advt_info"  parameterClass="com.myfood.dto.AdvertisementInfo" >
+  	 insert into advt_info(advt_type,start_date,end_date,total_budget,creator_id,daily_budget) 
+    values (#adtype#,#startDate#, #endDate#,#budget#,#creatorId#,#dailyBudget#)
+    <selectKey resultClass="long" keyProperty="advtCode" type="post">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+  </insert>
+  
+   <insert id="insert_advt_detail"  parameterClass="com.myfood.dto.AdvertisementInfo" >
+  	 insert into advt_detail(advt_code,advt_name,advt_header,advt_message,city,state,zipcode,distance,web_url,phone_number,latitude,longitude,address) 
+    values (#advtCode#, #advtName#, #adHeader#,#advtDesc#,#city#,#state#,#zipcode#,#distance#,#webUrl#,#phoneNumber#,#latitude#,#longitude#,#address#)
+  </insert>
+  <insert id="insert_advt_file_info"  parameterClass="com.myfood.dto.FileInfo" >
+  	 insert into advt_file_info(advt_code,file_id,file_name,media_type,ext,size,file_location) 
+    values (#advtCode#, #file_id#,#file_name#, #media_type#,#file_ext#,#file_size#,#file_path#)
+  </insert>
+  <insert id="insert_payment_info"  parameterClass="com.myfood.dto.PaymentInfo" >
+  	 insert into payment_info(advt_code,user_id,name_on_card,billing_name,billing_address,city,state,zipcode,country,card_number,transaction_type,transaction_id,transaction_date) 
+    values (#advtCode#,#user_id#, #name_on_card#, #billing_name#,#billing_address#,#city#,#state#,#zipcode#,#country#,#card_number#,#transaction_type#,#transaction_id#,now())
+  </insert>
+  <insert id="insert_advt_business_info"  parameterClass="com.myfood.dto.AdvtBusinessInfo" >
+  	 insert into business_info(business_name,business_contact,business_address,business_phone,city,state,zipcode,business_email,business_website,business_desc,business_services,business_specialities) 
+    values (#b_name#, #b_contact#, #b_address#,#b_phone#,#b_city#,#b_state#,#b_zipcode#,#b_email#,#b_website#,#b_desc#,#b_service_desc#,#b_specialities#)
+  </insert>
+  
+   <select id="get_advt_template" parameterClass="java.lang.Byte" resultClass="com.myfood.dto.AdvtTemplate" >
+  	SELECT template_type as templateType,advtType as advtType ,advturl from advt_template where status=0 and advtType=#type#
+  </select>
+  
+  <select id="get_my_advt_list" parameterClass="java.util.Map" resultClass="com.myfood.dto.AdvertisementInfo" >
+  	SELECT ai.advt_code as advtCode,ad.advt_name as advtName,ai.status as status,ai.start_date as startDate ,ai.end_date as endDate,
+  	ai.total_budget as budget,ai.creator_id as creatorId 
+  	FROM advt_info ai, advt_detail ad where ai.advt_code=ad.advt_code 
+  	and ai.creator_id=#creatorId# and ai.status !=#status# order by ai.advt_code desc limit #startLimit#,#endLimit#	
+  </select>
+  
+   <update id="update_advt_status"  parameterClass="java.util.Map">
+	 update advt_info set status=#status#,modified_date=now()
+	 where advt_code=#advtCode# and creator_id=#userId# and status!=#status#
+  </update>
+ 
+   <select id="get_advt_list_by_userid" parameterClass="java.util.Map" resultClass="java.lang.Long">
+	 SELECT ai.advt_code 
+  	 FROM advt_info ai, advt_detail ad where ai.advt_code=ad.advt_code 
+  	 and ai.creator_id=#creatorId# and ai.status !=#status# order by ai.advt_code desc
+	</select>
+	
+	<select id="get_advt_stats_list" parameterClass="java.util.Map" resultClass="com.myfood.dto.AdvtStats">
+		SELECT ai.advt_name as advtName,adt.clicks,adt.views,adt.calls,ai.longitude,ai.latitude FROM advt_stats adt, advt_detail ai where ai.advt_code=adt.advtcode and adt.advtCode IN ($advtIds$)
+	</select>
+	
+
+</sqlMap> 

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Maps the UserProfileMod table -->
+<!DOCTYPE sqlMap
+  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+  "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="business">
+
+  <insert id="insert_business_info"  parameterClass="com.myfood.dto.BusinessInfo" >
+  	 insert into business_info(user_id,business_name,business_contact_name,business_address,business_city,business_state,business_country,
+  	 business_zip,business_phone,business_email,business_website,business_desc,business_services,business_specialities,business_longitude,
+  	 business_latitude,business_cat_id,business_sub_cat_ids,business_starting_date,business_reg_date) 
+    values (#userId#,#bussName#, #bussContName#,#bussAddress#,#bussCity#,#bussState#,#bussCountry#,#bussZip#,#bussPhone#,#bussEmail#,#bussWeb#,#bussDesc#,
+          #bussService#,#bussSpeciality#, #bussLong#,#bussLat#,#catId#,#subCatId#,#bussStartDate#,now())
+    <selectKey resultClass="long" keyProperty="bussId" type="post">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+  </insert>
+  
+  <insert id="insert_business_file_info"  parameterClass="com.myfood.dto.BusinessFileInfo" >
+  	 insert into business_file_info(business_id,file_id,file_name,media_type,ext,size,file_location) 
+    values (#bussId#, #fileId#,#origFName#, #mediaType#,#fileExt#,#fileSize#,#filePath#)
+  </insert>
+  
+   <select id="get_business_details" parameterClass="java.lang.Long" resultClass="com.myfood.dto.BusinessInfo" >
+  	SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_city as bussCity,business_state as bussState,business_country as bussCountry,business_zip as bussZip,business_phone as bussPhone,
+  	 business_email as bussEmail,business_website as bussWeb,business_desc as bussDesc,business_services as bussService,
+  	 business_specialities as bussSpeciality,business_longitude as bussLong,business_latitude as bussLat,business_cat_id as catId,
+  	 business_sub_cat_ids as subCatId,business_starting_date as bussStartDate,feed_type as feedType,business_view as view 
+  	 FROM business_info where business_id=#businessId# and business_status=1
+   </select>
+   
+   <select id="get_my_business_details" parameterClass="java.util.Map" resultClass="com.myfood.dto.BusinessInfo" >
+  	SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_city as bussCity,business_state as bussState,business_country as bussCountry,business_zip as bussZip,business_phone as bussPhone,
+  	 business_email as bussEmail,business_website as bussWeb,business_desc as bussDesc,business_services as bussService,
+  	 business_specialities as bussSpeciality,business_longitude as bussLong,business_latitude as bussLat,business_cat_id as catId,
+  	 business_sub_cat_ids as subCatId,business_starting_date as bussStartDate,feed_type as feedType,business_view as view 
+  	 FROM business_info where business_id=#businessId# and user_id=#userId# and business_status=1
+   </select>
+   
+   <select id="get_my_business_list" parameterClass="java.lang.Long" resultClass="com.myfood.dto.BusinessInfo" >
+  	SELECT business_id as bussId,user_id as userId,business_name as bussName,business_contact_name as bussContName,business_address as bussAddress,
+  	 business_zip as bussZip,business_phone as bussPhone,feed_type as feedType
+  	 FROM business_info where user_id=#userId# and business_status=1 order by business_id desc limit 20
+   </select>
+   
+    <update id="update_business_status"  parameterClass="java.util.Map">
+	 update business_info set business_status=#status#,modified_date=now()
+	 where business_id=#businessId# and user_id=#userId# and business_status!=#status#
+   </update>
+   
+    <update id="update_business_view"  parameterClass="java.lang.Long">
+	 update business_info set business_view=business_view+1
+	 where business_id=#businessId#
+   </update>
+   
+   <update id="update_business_details"  parameterClass="com.myfood.dto.BusinessInfo">
+	 update business_info set business_name=#bussName#,business_contact_name=#bussContName#,business_address=#bussAddress#,business_city=#bussCity#,
+	 business_state=#bussState#,business_country=#bussCountry#,
+  	 business_zip=#bussZip#,business_phone=#bussPhone#,business_email=#bussEmail#,business_website=#bussWeb#,
+  	 business_desc=#bussDesc#,business_services=#bussService#,business_specialities=#bussSpeciality#,business_longitude=#bussLong#,
+  	 business_latitude=#bussLat#,business_cat_id=#catId#,business_sub_cat_ids=#subCatId#,modified_date=now()
+	 where business_id=#bussId#
+   </update>
+ 
+
+
+</sqlMap> 

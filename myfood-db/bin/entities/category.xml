@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Maps the UserProfileMod table -->
+<!DOCTYPE sqlMap
+  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+  "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="category">
+
+  
+   <select id="get_category_list" parameterClass="java.lang.String" resultClass="com.myfood.dto.CategoryDTO" >
+  	SELECT cat_id as catId,category_name as catName FROM business_category where country_code=#countryCode# and status=1
+  </select>
+  
+	
+	<select id="get_sub_category_list" parameterClass="java.lang.Integer" resultClass="com.myfood.dto.SubCategoryDTO">
+		SELECT cat_id as catId,sub_cat_id as subCatId,sub_cat_name as subCatName FROM business_sub_category where cat_id=#catId# and status=1
+	</select>
+	
+
+</sqlMap> 

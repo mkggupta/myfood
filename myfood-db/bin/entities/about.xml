@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Maps the UserProfileMod table -->
+<!DOCTYPE sqlMap
+  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+  "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="about">
+
+  
+   <select id="get_about_details" resultClass="java.lang.String">
+  	  SELECT about_text FROM about_us where status=1 order by about_id desc limit 1
+  </select>
+  
+	
+
+</sqlMap> 

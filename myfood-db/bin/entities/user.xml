@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Maps the UserProfileMod table -->
+<!DOCTYPE sqlMap
+  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+  "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="UserInfo">
+	<insert id="insert_user_auth" parameterClass="com.myfood.dto.UserAuth">
+		insert into user_auth (username, password, status, created_date, modified_date,last_login_time, registration_mode,
+		last_login_mode,current_client_version,current_platform,login_status,latitude,longitude,last_location) VALUES (#userName#,#password#, #status#, now(), now(), now(),
+		#registrationMode#,#lastLoginMode#,#currentClientVersion#,#currentPlatform#,#loginStatus#,#latitude#,#longitude#,#lastLocation#);
+		<selectKey resultClass="long" keyProperty="id" type="post">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="insert_user_third_party_auth" parameterClass="com.myfood.dto.UserThirdPartyAuth">
+		INSERT INTO user_third_party_auth (id, third_party_id, user_key, app_key) VALUES (#id#,
+		#thirdPartyId#, #userKey#, #appKey#)
+	</insert>
+	
+	<insert id="insert_user_info" parameterClass="com.myfood.dto.UserInfo">
+		INSERT INTO user_info (id,contact_name,business_name, dob, gender, secondary_email_address, contact_number,
+		contact_address1, contact_address2, zipcode, city, state, country, modified_date,language,location,primary_email_address) VALUES (#id#,
+		#contactName#,#businessName#,#dob#, #gender#, #secondaryEmailAddress#, #contactNumber#, #contactAddressLine1#,#contactAddressLine2#, #zipcode#, #city#, #state#,
+		#country#,now(),#language#,#location#,#primaryEmailAddress#)
+	</insert>
+	
+	<select id="get_userid_by_userkey_id" parameterClass="java.util.Map" resultClass="java.lang.Long">
+  		SELECT id FROM user_third_party_auth where user_key=#userKey# and third_party_id=#thirdPartyId#
+     </select>
+     
+     <select id="get_user_name_by_id" parameterClass="java.lang.Long" resultClass="java.lang.String">
+	  	 SELECT username FROM user_auth where id=#userId# and status=1
+	 </select>
+	  
+    <select id="get_user_info_by_id" parameterClass="java.lang.Long" resultClass="com.myfood.dto.UserInfo">
+	  	SELECT id,contact_name as contactName , dob, gender, secondary_email_address as secondaryEmailAddress, contact_number as contactNumber,
+		contact_address1 as contactAddressLine1, contact_address2 as contactAddressLine2, zipcode, city, state, country, 
+		language,location,primary_email_address as primaryEmailAddress FROM user_info where id=#userId# 
+     </select>
+     
+     <update id="update_user_info" parameterClass="com.myfood.dto.UserInfo">
+		UPDATE user_info set contact_name =#contactName#,business_name=#businessName#, secondary_email_address =
+		#secondaryEmailAddress#, contact_number=#contactNumber#,contact_address1 =#contactAddressLine1#,
+		contact_address2=#contactAddressLine2#, zipcode = #zipcode#, city = #city#, state = #state#, country = #country#,
+		modified_date=now(),web_site=#webSite#,language=#language#,user_desc=#userDescription#
+		where id=#id#
+	</update>
+	
+ </sqlMap> 

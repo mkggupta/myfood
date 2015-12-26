@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.springframework.org/schema/jms" xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.0.xsd
+		http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core-5.3.0.xsd">
+
+	<!-- =========== RESOURCE DEFINITIONS START========================= -->
+
+	<context:property-placeholder  ignore-unresolvable="true" />
+	<!-- =========== RESOURCE DEFINITIONS END========================= -->
+	<bean id="aboutService" class="com.myfood.service.about.service.v1_0.AboutServiceImpl">
+		<property name="aboutDAO" ref="appAboutDAOImpl" />
+	</bean>
+	
+	<bean id="advtService" class="com.myfood.service.advt.service.v1_0.AdvtServiceImpl">
+		<property name="advtDAO" ref="appAdvtDAOImpl" />
+	</bean>
+	<bean id="businessService" class="com.myfood.service.business.service.v1_0.BusinessServiceImpl">
+		<property name="businessDAO" ref="appBusinessDAOImpl" />
+	</bean>
+	
+	<bean id="catService" class="com.myfood.service.cat.service.v1_0.CatServiceImpl">
+		<property name="catDAO" ref="appCatDAOImpl" />
+	</bean>
+	
+	<bean id="feedBackService" class="com.myfood.service.feedback.service.v1_0.FeedBackServiceImpl">
+		<property name="feedbackDAO" ref="appFeedbackDAOImpl" />
+	</bean>
+	
+	<bean id="searchService" class="com.myfood.service.search.service.v1_0.SearchServiceImpl">
+		<property name="searchDAO" ref="appSearchDAOImpl" />
+	</bean>
+	
+	<bean id="userService" class="com.myfood.service.user.service.v1_0.UserServiceImpl">
+		<property name="userDAO" ref="appUserDAOImpl" />
+	</bean>
+	
+
+</beans>
